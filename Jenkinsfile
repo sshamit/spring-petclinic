@@ -50,16 +50,37 @@ pipeline {
         }
         stage('Unit Test and Code Coverage') {
             steps {
-                sh './mvnw clean test'
+                //sh './mvnw clean test'
             }
             // post build section to use "publishTestResult" method to publish test result
             post {
                 always {
-                    publishTestResult type:'unittest', fileLocation: './mochatest.json'
-                    publishTestResult type:'code', fileLocation: './tests/coverage/reports/coverage-summary.json'
+                    publishTestResult type:'unittest', fileLocation: './target/surefire-reports/TEST-*.xml'
+                    publishTestResult type:'code', fileLocation: './target/site/jacoco/jacoco.xml'
                 }
             }
         }
+        stage ('SonarQube analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'Default SQ Scanner';
+                    withSonarQubeEnv('Default SQ Server') {
+
+                        env.SQ_HOST_URL = "https://sonarcloud.io";
+                        env.SQ_AUTHENTICATION_TOKEN = b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0;
+                        env.SQ_PROJECT_KEY = "My Project Key";
+
+                        sh './mvnw sonar:sonar -Dsonar.host.url="https://sonarcloud.io"'
+                    }
+                }
+            }
+            post {
+                always {
+                    publishSQResults SQHostURL: "${SQ_HOST_URL}", SQAuthToken: "${SQ_AUTHENTICATION_TOKEN}", SQProjectKey:"${SQ_PROJECT_KEY}"
+                }
+            }
+        }
+
         stage('Deploy to Staging') {
             steps {
                 // Push the Weather App to Bluemix, staging space
