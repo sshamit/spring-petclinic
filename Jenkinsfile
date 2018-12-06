@@ -65,10 +65,15 @@ pipeline {
 
                         env.SQ_HOST_URL = "https://sonarcloud.io";
                         env.SQ_AUTHENTICATION_TOKEN = b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0;
-                        env.SQ_PROJECT_KEY = "My Project Key";
+                        env.SQ_PROJECT_KEY = "sshamit-github";
 
-                        sh ' ./mvnw sonar:sonar -Dsonar.host.url="https://sonarcloud.io" -Dsonar.login="b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0" -Dsonar.organization=sshamit-github'
+                        ./mvnw sonar:sonar -Dsonar.host.url="${SQ_AUTHENTICATION_TOKEN}" -Dsonar.login="${SQ_AUTHENTICATION_TOKEN}" -Dsonar.organization="${SQ_PROJECT_KEY}"
                     }
+                }
+            }
+            post {
+                always {
+                    publishSQResults SQHostURL: "${SQ_HOSTNAME}", SQAuthToken: "${SQ_AUTHENTICATION_TOKEN}", SQProjectKey:"${SQ_PROJECT_KEY}"
                 }
             }
         }
@@ -96,9 +101,9 @@ pipeline {
                 sh '''
                         echo "Deploying App to Staging"
          
-                        ssh root@52.116.3.216 "rm -rf /root/java-temp-deploy/;mkdir /root/java-temp-deploy"
+                        ssh root@52.116.3.216 "cd /root/java-temp-deploy/ && stop.sh;rm -rf /root/java-temp-deploy/;mkdir /root/java-temp-deploy"
                         scp ./target/*.jar root@52.116.3.216:/root/java-temp-deploy/
-                        ssh root@52.116.3.216 "cd /root/java-temp-deploy/ && java -jar *.jar &"
+                        ssh root@52.116.3.216 "cd /root/java-temp-deploy/ && start.sh"
                         
                     '''
             }
