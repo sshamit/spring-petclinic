@@ -10,18 +10,14 @@ pipeline {
     agent any
     environment {
         // You need to specify 4 required environment variables first, they are going to be used for the following IBM Cloud DevOps steps
-        //IBM_CLOUD_DEVOPS_CREDS = credentials('97afa093-3137-4335-8b08-705a272b23aa')
-        //IBM_CLOUD_DEVOPS_ORG = 'CI/CD'
-        PYTHON= 'python2.7'
         IBM_CLOUD_DEVOPS_API_KEY=credentials('ibm-cloud-api-key')
         IBM_CLOUD_DEVOPS_APP_NAME = 'ibm-cloud-devops-plugin'
-        IBM_CLOUD_DEVOPS_TOOLCHAIN_ID = 'dff42b3d-ecf3-4478-952a-f0ad43e7725d'
-        //IBM_CLOUD_DEVOPS_WEBHOOK_URL = 'https://jenkins:ba8298ea-df31-48b2-bfcf-19a3b52d2788:4cdcf732-1057-42a8-84fd-69c10a536925@devops-api.eu-gb.bluemix.net/v1/toolint/messaging/webhook/publish'
+        IBM_CLOUD_DEVOPS_TOOLCHAIN_ID = 'e61dd55b-0489-49d2-983f-b2e9143aae20'
         GIT_REPO = 'https://github.com/sshamit/spring-petclinic'
     }
-    tools {
+    /*tools {
         nodejs 'recent' // your nodeJS installation name in Jenkins
-    }
+    }*/
     stages {
         stage('SCM') {
             steps {
@@ -60,7 +56,7 @@ pipeline {
                 }
             }
         }
-        stage ('SonarQube analysis') {
+        /*stage ('SonarQube analysis') {
             steps {
                 script {
                     def scannerHome = tool 'Default SQ Scanner';
@@ -91,7 +87,7 @@ pipeline {
                     publishSQResults SQHostURL: "${SQ_HOSTNAME}", SQAuthToken: "${SQ_AUTHENTICATION_TOKEN}", SQProjectKey:"${SQ_PROJECT_KEY}"
                 }
              }
-        }
+        }*/
         
         stage('Deploy to Staging') {
             steps {
@@ -122,7 +118,7 @@ pipeline {
                 evaluateGate policy: 'POLICY_NAME_PLACEHOLDER', forceDecision: 'true'
             }
         }
-        stage('Deploy to Prod') {
+        /*stage('Deploy to Prod') {
             steps {
                 // Push the Weather App to Bluemix, production space
                 sh '''
@@ -138,6 +134,6 @@ pipeline {
                     publishDeployRecord environment: "PRODUCTION", appUrl: "http://prod-${IBM_CLOUD_DEVOPS_APP_NAME}.mybluemix.net", result:"FAIL"
                 }
             }
-        }
+        }*/
     }
 }
