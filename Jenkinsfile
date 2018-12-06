@@ -113,12 +113,6 @@ pipeline {
             }
         }
         
-        stage('Gate') {
-            steps {
-                // use "evaluateGate" method to leverage IBM Cloud DevOps gate
-                evaluateGate policy: 'POLICY_NAME_PLACEHOLDER', forceDecision: 'true'
-            }
-        }
         /*stage('Deploy to Prod') {
             steps {
                 // Push the Weather App to Bluemix, production space
