@@ -63,7 +63,7 @@ pipeline {
             }
             post {
                 always {
-                    publishSQResults SQHostURL: "https://sonarcloud.io" , SQAuthToken: "b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0", SQProjectKey:"sshamit-github"
+                    publishSQResults SQHostURL: "https://sonarcloud.io" , SQAuthToken: "b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0", SQProjectKey:"org.springframework.samples:spring-petclinic"
                 }
             }
         }
@@ -74,9 +74,9 @@ pipeline {
                 sh '''
                         echo "Deploying App to Staging"
          
-                        ssh root@52.116.3.216 "cd /root/java-temp-deploy/ && stop.sh;rm -rf /root/java-temp-deploy/;mkdir /root/java-temp-deploy"
+                        ssh root@52.116.3.216 "cd /root/java-temp-deploy/ && ./stop.sh;rm -rf /root/java-temp-deploy/;mkdir /root/java-temp-deploy"
                         scp ./target/*.jar root@52.116.3.216:/root/java-temp-deploy/
-                        ssh root@52.116.3.216 "cd /root/java-temp-deploy/ && start.sh"
+                        ssh root@52.116.3.216 "cd /root/java-temp-deploy/ && ./start.sh"
                         
                     '''
             }
