@@ -59,11 +59,11 @@ pipeline {
         }
         stage ('SonarQube analysis') {
             steps {
-                sh './mvnw sonar:sonar -Dsonar.host.url="https://sonarcloud.io" -Dsonar.login="${SQ_AUTHENTICATION_TOKEN}" -Dsonar.organization="sshamit-github"'
+                sh './mvnw sonar:sonar -Dsonar.host.url="https://sonarcloud.io" -Dsonar.login="b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0" -Dsonar.organization="sshamit-github"'
             }
             post {
                 always {
-                    publishSQResults SQHostURL: "https://sonarcloud.io" , SQAuthToken: b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0, SQProjectKey:"sshamit-github"
+                    publishSQResults SQHostURL: "https://sonarcloud.io" , SQAuthToken: "b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0", SQProjectKey:"sshamit-github"
                 }
             }
         }
