@@ -59,40 +59,13 @@ pipeline {
         }
         stage ('SonarQube analysis') {
             steps {
-                script {
-                    def scannerHome = tool 'Default SQ Scanner';
-                    withSonarQubeEnv('Default SQ Server') {
-
-                        env.SQ_HOST_URL = "https://sonarcloud.io";
-                        env.SQ_AUTHENTICATION_TOKEN = b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0;
-                        env.SQ_PROJECT_KEY = "sshamit-github";
-
-                        ./mvnw sonar:sonar -Dsonar.host.url="${SQ_AUTHENTICATION_TOKEN}" -Dsonar.login="${SQ_AUTHENTICATION_TOKEN}" -Dsonar.organization="${SQ_PROJECT_KEY}"
-                    }
-                }
+                sh './mvnw sonar:sonar -Dsonar.host.url="https://sonarcloud.io" -Dsonar.login="${SQ_AUTHENTICATION_TOKEN}" -Dsonar.organization="sshamit-github"'
             }
             post {
                 always {
-                    publishSQResults SQHostURL: "${SQ_HOSTNAME}", SQAuthToken: "${SQ_AUTHENTICATION_TOKEN}", SQProjectKey:"${SQ_PROJECT_KEY}"
+                    publishSQResults SQHostURL: "https://sonarcloud.io" , SQAuthToken: b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0, SQProjectKey:"sshamit-github"
                 }
             }
-        }
-
-        stage ("SonarQube Quality Gate") {
-             steps {
-                script {
-
-                    def qualitygate = waitForQualityGate()
-                    if (qualitygate.status != "OK") {
-                        error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
-                    }
-                }
-             }
-             post {
-                always {
-                    publishSQResults SQHostURL: "${SQ_HOSTNAME}", SQAuthToken: "${SQ_AUTHENTICATION_TOKEN}", SQProjectKey:"${SQ_PROJECT_KEY}"
-                }
-             }
         }
         
         stage('Deploy to Staging') {
