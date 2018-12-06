@@ -96,7 +96,7 @@ pipeline {
                 sh '''
                         echo "Deploying App to Staging"
          
-                        ssh root@52.116.3.216 "forever stop /root/temp-deploy/app.js; rm -rf /root/java-temp-deploy/;"
+                        ssh root@52.116.3.216 "rm -rf /root/java-temp-deploy/;"
                         scp -pr ./target/*.jar root@52.116.3.216:/root/java-temp-deploy/
                         ssh root@52.116.3.216 "cd /root/java-temp-deploy/ && java -jar target/*.jar"
                         
