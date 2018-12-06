@@ -74,13 +74,25 @@ pipeline {
                     }
                 }
             }
-            post {
-                always {
-                    publishSQResults SQHostURL: "${SQ_HOST_URL}", SQAuthToken: "${SQ_AUTHENTICATION_TOKEN}", SQProjectKey:"${SQ_PROJECT_KEY}"
-                }
-            }
         }
 
+        stage ("SonarQube Quality Gate") {
+             steps {
+                script {
+
+                    def qualitygate = waitForQualityGate()
+                    if (qualitygate.status != "OK") {
+                        error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
+                    }
+                }
+             }
+             post {
+                always {
+                    publishSQResults SQHostURL: "${SQ_HOSTNAME}", SQAuthToken: "${SQ_AUTHENTICATION_TOKEN}", SQProjectKey:"${SQ_PROJECT_KEY}"
+                }
+             }
+        }
+        
         stage('Deploy to Staging') {
             steps {
                 // Push the Weather App to Bluemix, staging space
@@ -103,6 +115,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Gate') {
             steps {
                 // use "evaluateGate" method to leverage IBM Cloud DevOps gate
