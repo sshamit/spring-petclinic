@@ -47,6 +47,7 @@ pipeline {
         stage('Unit Test and Code Coverage') {
             steps {
                 //sh './mvnw clean test'
+                sh 'echo "Started App test and coverage"'
             }
             // post build section to use "publishTestResult" method to publish test result
             post {
