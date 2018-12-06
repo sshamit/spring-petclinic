@@ -1,5 +1,5 @@
 #!/bin/bash
-java -jar target/*.jar &      # You send it in background
+java -jar *.jar &      # You send it in background
 MyPID=$!                        # You sign it's PID
 echo $MyPID                     # You print to terminal
 chmod +x stop.sh
