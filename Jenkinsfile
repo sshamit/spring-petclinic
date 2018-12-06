@@ -57,7 +57,7 @@ pipeline {
                 }
             }
         }
-        /*stage ('SonarQube analysis') {
+        stage ('SonarQube analysis') {
             steps {
                 script {
                     def scannerHome = tool 'Default SQ Scanner';
@@ -67,7 +67,7 @@ pipeline {
                         env.SQ_AUTHENTICATION_TOKEN = b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0;
                         env.SQ_PROJECT_KEY = "My Project Key";
 
-                        sh './mvnw sonar:sonar -Dsonar.host.url="https://sonarcloud.io"'
+                        sh ' ./mvnw sonar:sonar -Dsonar.host.url="https://sonarcloud.io" -Dsonar.login="b1704d62bc11d4a2cff0fc1edee48a7ad9b354d0" -Dsonar.organization=sshamit-github'
                     }
                 }
             }
@@ -88,7 +88,7 @@ pipeline {
                     publishSQResults SQHostURL: "${SQ_HOSTNAME}", SQAuthToken: "${SQ_AUTHENTICATION_TOKEN}", SQProjectKey:"${SQ_PROJECT_KEY}"
                 }
              }
-        }*/
+        }
         
         stage('Deploy to Staging') {
             steps {
